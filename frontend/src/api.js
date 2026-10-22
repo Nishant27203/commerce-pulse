@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-export const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+const configuredApiUrl = import.meta.env.VITE_API_URL?.trim();
+export const API_BASE = configuredApiUrl
+  ? configuredApiUrl.replace(/\/+$/, '')
+  : 'http://127.0.0.1:8000';
 const api = axios.create({ baseURL: API_BASE, timeout: 60000 });
 
 export function errorMessage(error) {

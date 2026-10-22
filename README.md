@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="assets/commerce-pulse-banner.png" alt="Commerce Pulse — e-commerce sales and business intelligence workspace" width="100%" />
+</div>
+
 # Commerce Ledger — Sales & Business Intelligence Workspace
 
 Commerce Ledger is a full-stack portfolio project for **Data Analyst, BI Analyst, and Business Analyst** applications. It combines a React dashboard, a Python/FastAPI API, SQLite persistence, interactive charts, an upload-and-submit workflow, and SQL examples in one repository.
@@ -166,14 +170,22 @@ npm install
 npm run build
 ```
 
-## Deploying / publishing to GitHub
+## Deploy online with Render
 
-This is a local-development full-stack project, not a single static HTML page. The React frontend and FastAPI backend must both be deployed for online upload and analysis to work. Configure `VITE_API_URL` to the deployed API's public URL and configure CORS in `backend/app/main.py` for the deployed frontend origin before publishing. Use a persistent disk or managed database if deploying to a host with ephemeral filesystems.
+The root `render.yaml` defines two services from this repository: a FastAPI API (`commerce-pulse-api`) and a React/Vite static frontend (`commerce-pulse-web`).
 
-Before pushing to GitHub:
-- Ensure `.gitignore` is active and `backend/data/commerce.db`, uploaded customer files, exports, `.venv/` and `frontend/node_modules/` are not committed.
-- Use only synthetic/demo data in the public repository.
-- Update the README screenshots and the live URL only after you have deployed and verified them yourself.
+### Deploy steps
+1. Sign in to [Render](https://dashboard.render.com/) and connect/authorize your GitHub account if prompted.
+2. Open **New + → Blueprint** (official guide: [Render Blueprints](https://render.com/docs/infrastructure-as-code)).
+3. Select `Nishant27203/commerce-pulse`, branch `main`, and apply the Blueprint in `render.yaml`.
+4. Wait for both the API and frontend builds to finish. Open the frontend service URL; the API URL is supplied to Vite from Render's `RENDER_EXTERNAL_URL`.
+5. If Render gives the frontend a different hostname, update `CORS_ORIGINS` on the API service to include that exact `https://...onrender.com` origin, then redeploy the API.
+
+### Important hosting limits
+- Free web services can sleep after inactivity; the first request after sleep may take longer.
+- The bundled sample records are synthetic demo data, not live store data.
+- The free service's SQLite filesystem may be ephemeral. Uploaded datasets can be lost after a redeploy/restart unless a persistent disk or managed database is configured. Do not upload confidential customer files to a public demo.
+- Keep `.env`, secrets, real customer data, exported private data, `.venv/`, `frontend/node_modules/` and the runtime `backend/data/commerce.db` out of Git.
 
 ## Resume entry — edit to match what you can explain
 

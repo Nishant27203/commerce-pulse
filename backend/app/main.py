@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import io
 import json
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
@@ -40,9 +41,16 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+# CORS_ORIGINS is a comma-separated allow-list for the deployed frontend.
+_default_origins = "http://localhost:5173,http://127.0.0.1:5173"
+_allowed_origins = [
+    origin.strip().rstrip("/")
+    for origin in os.getenv("CORS_ORIGINS", _default_origins).split(",")
+    if origin.strip()
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=_allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
